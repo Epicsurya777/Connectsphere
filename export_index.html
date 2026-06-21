@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConnectSphere Standalone Ledger - Elite Professional Workstation</title>
+  
+  <!-- Modern Fonts and CSS framework via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tailwindcss/ui@latest/dist/tailwind-ui.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    
+    :root {
+      --brand-blue: #0A66C2;
+      --brand-blue-hover: #004182;
+      --brand-bg-light: #F3F2EF;
+      --brand-bg-dark: #0F1419;
+      --card-dark: #1D2226;
+      --border-light: #D3D3D3;
+      --border-dark: #2F3336;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Helvetica Neue", Arial, "Inter", sans-serif;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    /* Print styles specifically tailored for standard A4 landscape or portrait outputs */
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: white !important;
+        color: black !important;
+        padding: 0 !important;
+      }
+      .print-container {
+        border: none !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+
+    /* Custom high contrast styling */
+    .font-black-header {
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+    
+    .tracked-caps {
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body class="bg-[#F3F2EF] text-gray-950 dark:bg-[#0F1419] dark:text-gray-100 min-h-screen flex flex-col pb-12">
+
+  <!-- Interactive State Engine Layer -->
+  <script>
+    // Initialize standard LinkedIn-style seed database in localStorage
+    const defaultState = {
+      isDarkMode: false,
+      activeTab: 'feed',
+      user: {
+        name: "Alex Rivera",
+        headline: "Principal Cloud Architect • Google Workspace Developer Specialist",
+        location: "San Francisco Bay Area, USA",
+        avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&auto=format&fit=crop&q=80",
+        cover: "linear-gradient(135deg, #0A66C2 0%, #004182 100%)",
+        about: "Pioneering scalable enterprise cloud architecture and workspace synchronization infrastructure. Specializing in secure integration protocols, distributed system topologies, and high-throughput real-time APIs. Guiding technical development squads of over 50 professionals globally to deploy highly reliable hybrid architectures.",
+        experience: [
+          {
+            id: 1,
+            role: "Principal Cloud Architect",
+            company: "Google Cloud Core Systems",
+            duration: "2023 - Present",
+            desc: "Directing standard security templates, workspace identity frameworks, and API optimization workflows. Scaled real-time communications backend modules to accommodate 140M+ concurrent WebSocket sessions with an operational uptime score of 99.999%."
+          },
+          {
+            id: 2,
+            role: "Senior Enterprise Tech Lead",
+            company: "Microsoft Enterprise Division",
+            duration: "2020 - 2023",
+            desc: "Engineered server-side sync strategies and secure OAuth integration flows for Fortune 500 corporate clients. Rebuilt legacy monolithic data endpoints into modular containerized microservices systems."
+          }
+        ],
+        education: [
+          {
+            id: 1,
+            degree: "Ph.D. in Computer Science",
+            school: "Stanford University",
+            year: "Class of 2017"
+          }
+        ],
+        skills: ["Systems Architecture", "Google Cloud Engine", "Distributed Systems", "OAuth 2.0 / Cryptography", "Enterprise Devops", "TypeScript / React"]
+      },
+      posts: [
+        {
+          id: 1,
+          authorName: "Sarah Jenkins",
+          authorHeadline: "VP of Product Strategy at Stripe",
+          authorAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+          timestamp: "3 hours ago",
+          content: "We just published our 2026 Developer API Blueprint document! It covers standard developer grade schemas, async webhook architectures, and tokenized authorization routes. Real game changer for low-friction technical integrations.",
+          likes: 42,
+          isLiked: false,
+          comments: [
+            { author: "Michael Chang", content: "Outstanding breakdown Sarah, especially the security recommendations." }
+          ]
+        },
+        {
+          id: 2,
+          authorName: "Alex Rivera",
+          authorHeadline: "Principal Cloud Architect • Google Workspace Developer Specialist",
+          authorAvatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
+          timestamp: "1 day ago",
+          content: "Pioneering secure Federated Identity handshakes in sandboxed environments this morning. Absolutely vital to keep OAuth scope requests focused to maximize user data custody security.",
+          likes: 128,
+          isLiked: true,
+          comments: []
+        }
+      ],
+      connections: [
+        {
+          id: 101,
+          name: "Diana Prince",
+          headline: "Engineering Director at Meta",
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+          mutualCount: 12,
+          status: 'recommended' // 'recommended', 'pending', 'connected'
+        },
+        {
+          id: 102,
+          name: "Marcus Aurelius",
+          headline: "Product Analyst at Apple",
+          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+          mutualCount: 5,
+          status: 'pending'
+        },
+        {
+          id: 103,
+          name: "Ada Lovelace",
+          headline: "Compiler Engineer at NVIDIA",
+          avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
+          mutualCount: 19,
+          status: 'connected'
+        }
+      ],
+      jobs: [
+        {
+          id: 201,
+          role: "Lead Systems Administrator",
+          company: "Netflix Infrastructure Systems",
+          location: "Los Angeles, CA & Remote",
+          salary: "$180,000 - $220,000",
+          tags: ["Bash", "Linux", "AWS", "Security"],
+          isApplied: false
+        },
+        {
+          id: 202,
+          role: "Senior Full Stack Specialist",
+          company: "GitHub Integrations Engineering",
+          location: "San Francisco, CA & Remote",
+          salary: "$165,000 - $210,000",
+          tags: ["TypeScript", "GraphQL", "Ruby", "React"],
+          isApplied: false
+        }
+      ],
+      messages: [
+        {
+          id: 301,
+          contactName: "Eleanor Vance (Recruitment Manager)",
+          contactAvatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+          history: [
+            { sender: 'them', text: "Hi Alex! Your Cloud Architect credentials caught our eye. Are you open to scheduling a brief brief next Tuesday?" },
+            { sender: 'me', text: "Hello Eleanor! Thanks for reaching out. I'm always open to discussing robust architectures. Tuesday afternoon works great." },
+            { sender: 'them', text: "Superb. I’ll send a workspace invite right over!" }
+          ]
+        },
+        {
+          id: 302,
+          contactName: "Arthur Dent",
+          contactAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+          history: [
+            { sender: 'them', text: "Did you catch the new update to standard Node type-stripping runtimes? Really clean." }
+          ]
+        }
+      ],
+      activeChatId: 301,
+      stats: {
+        views: 892,
+        impressions: 14204,
+        rank: "Diamond Elite"
+      }
+    };
+
+    // Global App State Object
+    window.AppState = JSON.parse(localStorage.getItem('connectsphere_v1_data')) || defaultState;
+
+    function saveState() {
+      localStorage.setItem('connectsphere_v1_data', JSON.stringify(window.AppState));
+    }
+  </script>
+
+  <!-- Navigation Bar (Sticky, Professional) -->
+  <header class="no-print sticky top-0 z-50 bg-white border-b border-gray-300 text-black dark:bg-[#1D2226] dark:border-gray-800 dark:text-white transition-colors duration-150">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Left Side Branding -->
+        <div class="flex items-center space-x-3">
+          <div onclick="switchTab('feed')" class="group cursor-pointer flex items-center space-x-2">
+            <div class="w-9 h-9 bg-[#0A66C2] rounded flex items-center justify-center font-bold text-2xl text-white shadow-sm transform group-active:scale-95 transition-transform">
+              C
+            </div>
+            <span class="text-2xl font-black tracking-tighter text-[#0A66C2] hover:text-[#004182] transition-colors">
+              ConnectSphere
+            </span>
+          </div>
+          
+          <div class="hidden md:block relative w-64">
+            <i data-lucide="search" class="absolute left-3 top-2.5 text-gray-400 w-4 h-4"></i>
+            <input 
+              type="text" 
+              placeholder="Search specialists, feeds..." 
+              oninput="performGlobalSearch(this.value)"
+              class="w-full pl-9 pr-4 py-1.5 text-xs rounded border border-gray-300 focus:outline-none focus:border-[#0A66C2] dark:bg-[#293138] dark:border-gray-700 dark:text-white transition-all"
+            >
+          </div>
+        </div>
+
+        <!-- Middle Slots (Icons & Tabs) -->
+        <nav class="flex items-center space-x-1 lg:space-x-3 h-full">
+          <button onclick="switchTab('feed')" id="tab-feed" class="nav-btn relative flex flex-col items-center justify-center h-16 px-3 text-[10px] font-extrabold uppercase tracking-widest text-[#0A66C2] border-b-2 border-[#0A66C2]">
+            <i data-lucide="home" class="w-5 h-5 mb-0.5"></i>
+            <span class="hidden sm:inline">Feed</span>
+          </button>
+          
+          <button onclick="switchTab('network')" id="tab-network" class="nav-btn relative flex flex-col items-center justify-center h-16 px-3 text-[10px] font-extrabold uppercase tracking-widest text-gray-500 hover:text-black dark:hover:text-white">
+            <i data-lucide="users" class="w-5 h-5 mb-0.5"></i>
+            <span class="hidden sm:inline">Network</span>
+            <span id="badge-network" class="absolute top-2 right-1.5 w-4 h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center">1</span>
+          </button>
+          
+          <button onclick="switchTab('jobs')" id="tab-jobs" class="nav-btn relative flex flex-col items-center justify-center h-16 px-3 text-[10px] font-extrabold uppercase tracking-widest text-gray-500 hover:text-black dark:hover:text-white">
+            <i data-lucide="briefcase" class="w-5 h-5 mb-0.5"></i>
+            <span class="hidden sm:inline">Jobs</span>
+          </button>
+          
+          <button onclick="switchTab('messaging')" id="tab-messaging" class="nav-btn relative flex flex-col items-center justify-center h-16 px-3 text-[10px] font-extrabold uppercase tracking-widest text-gray-500 hover:text-black dark:hover:text-white">
+            <i data-lucide="message-square" class="w-5 h-5 mb-0.5"></i>
+            <span class="hidden sm:inline">Messages</span>
+          </button>
+          
+          <button onclick="switchTab('profile')" id="tab-profile" class="nav-btn relative flex flex-col items-center justify-center h-16 px-3 text-[10px] font-extrabold uppercase tracking-widest text-gray-500 hover:text-black dark:hover:text-white">
+            <i data-lucide="user" class="w-5 h-5 mb-0.5"></i>
+            <span class="hidden sm:inline">Me</span>
+          </button>
+        </nav>
+
+        <!-- Right System Commands -->
+        <div class="flex items-center space-x-3">
+          <button onclick="toggleTheme()" class="p-2 rounded bg-gray-100 hover:bg-gray-200 dark:bg-[#293138] dark:hover:bg-gray-700 text-gray-700 dark:text-yellow-400 transition-colors">
+            <i data-lucide="sun" id="sun-icon" class="w-4 h-4 hidden"></i>
+            <i data-lucide="moon" id="moon-icon" class="w-4 h-4"></i>
+          </button>
+          
+          <button onclick="downloadStandaloneCode()" class="hidden md:flex items-center space-x-1.5 px-3 py-1.5 bg-[#0a66c2] hover:bg-[#004182] text-white text-xs font-black uppercase tracking-wider rounded shadow-sm">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Get Code</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main System Fluid Container Grid -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      
+      <!-- LEFT RETRACTABLE SIDEBAR (User Summary Panel) -->
+      <aside class="no-print lg:col-span-1 space-y-4">
+        <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl overflow-hidden shadow-sm">
+          <!-- Top Backdrop -->
+          <div class="h-16 bg-gradient-to-r from-[#0A66C2] to-[#004182]"></div>
+          
+          <!-- Avatar Identity Core -->
+          <div class="px-4 pb-4 text-center relative">
+            <img 
+              id="sidebar-avatar"
+              src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80" 
+              alt="Alex Rivera" 
+              class="w-16 h-16 rounded object-cover border-2 border-white dark:border-gray-800 mx-auto -mt-8 shadow-sm"
+            >
+            <h3 onclick="switchTab('profile')" id="sidebar-name" class="mt-2 text-base font-black tracking-tight cursor-pointer hover:text-[#0A66C2] transition-colors">Alex Rivera</h3>
+            <p id="sidebar-headline" class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2 max-w-[190px] mx-auto font-semibold">Principal Cloud Architect • Google Workspace Developer Specialist</p>
+          </div>
+
+          <!-- Statistic Panel -->
+          <div class="border-t border-gray-300 dark:border-gray-800">
+            <div class="flex items-center justify-between px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+              <span>Profile Views</span>
+              <span id="sidebar-views" class="text-xs font-black text-[#0A66C2]">892</span>
+            </div>
+            <div class="flex items-center justify-between px-4 py-2.5 border-t border-gray-300 dark:border-gray-800 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+              <span>Post Impressions</span>
+              <span id="sidebar-impressions" class="text-xs font-black text-[#0A66C2]">14,204</span>
+            </div>
+          </div>
+
+          <!-- Manage CTA footer wrapper -->
+          <div class="bg-gray-50 dark:bg-gray-800/20 p-2.5 border-t border-gray-300 dark:border-gray-800 text-center">
+            <button onclick="switchTab('profile')" class="w-full py-1 text-xs font-black uppercase tracking-wider text-[#0A66C2] hover:bg-white dark:hover:bg-gray-800 rounded border border-[#0A66C2]/30 transition-all">
+              Manage Profile
+            </button>
+          </div>
+        </div>
+
+        <!-- Professional Badge Metric -->
+        <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 shadow-sm">
+          <div class="flex items-center space-x-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">
+            <i data-lucide="sparkles" class="text-yellow-500 w-3.5 h-3.5 animate-pulse"></i>
+            <span>Professional Network Tier</span>
+          </div>
+          <div class="bg-[#EDF3F8] dark:bg-gray-800/50 p-2.5 rounded border border-[#0A66C2]/20">
+            <p class="text-[10px] text-gray-500 dark:text-gray-400 font-extrabold tracking-wider uppercase">Rank Status:</p>
+            <p class="text-sm font-black text-[#0A66C2] dark:text-blue-400 mt-0.5">Diamond Elite Developer</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MIDDLE PRIMARY WORKSTATION STAGE -->
+      <div class="lg:col-span-2 space-y-6">
+
+        <!-- ================= FEED SECTION ================= -->
+        <section id="pane-feed" class="app-pane space-y-4">
+          <!-- Create Post Composer -->
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 shadow-sm no-print">
+            <div class="flex items-start space-x-3">
+              <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&auto=format&fit=crop&q=80" class="w-10 h-10 rounded object-cover border border-gray-300">
+              <div class="flex-grow">
+                <textarea 
+                  id="feed-input" 
+                  rows="3" 
+                  placeholder="Share a project specs, architectural diagram, or industry insight..."
+                  class="w-full text-sm font-medium py-2 px-3 rounded border border-gray-300 focus:outline-none focus:border-[#0A66C2] dark:bg-[#293138] dark:border-gray-700 dark:text-white resize-none"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Composer actions -->
+            <div class="flex items-center justify-between pt-3 border-t border-gray-300 dark:border-gray-800 mt-3">
+              <div class="flex space-x-2 text-gray-500">
+                <button onclick="alert('Simulated image attachment!')" class="flex items-center space-x-1 px-2.5 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-bold uppercase tracking-wider">
+                  <i data-lucide="image" class="w-4 h-4 text-blue-500"></i>
+                  <span class="hidden sm:inline">Photo</span>
+                </button>
+                <button onclick="alert('Simulated link attachment!')" class="flex items-center space-x-1 px-2.5 py-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-bold uppercase tracking-wider">
+                  <i data-lucide="link" class="w-4 h-4 text-emerald-500"></i>
+                  <span class="hidden sm:inline">Link</span>
+                </button>
+              </div>
+              
+              <button onclick="createNewPost()" class="px-5 py-1.5 bg-[#0A66C2] hover:bg-[#004182] text-white text-xs font-black uppercase tracking-wider rounded shadow-sm">
+                Publish Post
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Feeds List -->
+          <div id="posts-container" class="space-y-4">
+            <!-- Programmatically injected -->
+          </div>
+        </section>
+
+        <!-- ================= NETWORK SECTION ================= -->
+        <section id="pane-network" class="app-pane hidden space-y-6">
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 shadow-sm">
+            <h2 class="text-lg font-black tracking-tight flex items-center space-x-2">
+              <i data-lucide="users" class="text-[#0A66C2] w-5 h-5"></i>
+              <span>Professional Networking Hub</span>
+            </h2>
+            <p class="text-xs text-gray-500 mt-1">Accept professional bids, review colleagues, or expand connections.</p>
+          </div>
+
+          <!-- Pending Connections list -->
+          <div class="space-y-3">
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Pending Actions</h3>
+            <div id="pending-network-container" class="space-y-3">
+              <!-- Render pending invites -->
+            </div>
+          </div>
+
+          <!-- General recommendation list -->
+          <div class="space-y-3">
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Discover Leaders & Co-Founders</h3>
+            <div id="recommendations-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Render recommendations -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= JOBS SECTION ================= -->
+        <section id="pane-jobs" class="app-pane hidden space-y-4">
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-5 shadow-sm">
+            <h2 class="text-lg font-black tracking-tight flex items-center space-x-2">
+              <i data-lucide="briefcase" class="text-[#0A66C2] w-5 h-5"></i>
+              <span>Vetted Technology Opportunities</span>
+            </h2>
+            <p class="text-xs text-gray-500 mt-1">Direct algorithmic matches based on your certified master skills profile.</p>
+          </div>
+
+          <div id="jobs-container" class="space-y-4">
+            <!-- Programmatically injected -->
+          </div>
+        </section>
+
+        <!-- ================= MESSAGING SECTION ================= -->
+        <section id="pane-messaging" class="app-pane hidden">
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-3 min-h-[500px]">
+            
+            <!-- Left Thread Panel -->
+            <div class="md:col-span-1 border-r border-gray-300 dark:border-gray-800 flex flex-col">
+              <div class="p-3 bg-gray-50 dark:bg-[#252c31] border-b border-gray-300 dark:border-gray-800 text-[10px] font-extrabold uppercase tracking-wider text-gray-500">
+                Active Channels
+              </div>
+              <div id="message-threads-list" class="flex-grow overflow-y-auto divide-y divide-gray-200 dark:divide-gray-800">
+                <!-- Thread list injected -->
+              </div>
+            </div>
+
+            <!-- Right Conversational Box -->
+            <div class="md:col-span-2 flex flex-col bg-white dark:bg-[#1D2226] h-full justify-between">
+              <!-- Active Header -->
+              <div class="p-3 border-b border-gray-300 dark:border-gray-800 flex items-center justify-between bg-gray-50 dark:bg-[#252c31]">
+                <div class="flex items-center space-x-2">
+                  <span id="active-chat-name" class="text-xs font-black">Recruitment Direct</span>
+                </div>
+                <span class="text-[9px] font-bold text-emerald-500 uppercase tracking-widest flex items-center space-x-1">
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                  <span>Synced</span>
+                </span>
+              </div>
+
+              <!-- Message History stage -->
+              <div id="message-history-box" class="flex-grow p-4 overflow-y-auto space-y-3 h-[300px]">
+                <!-- Messages balloon lists dynamically loaded -->
+              </div>
+
+              <!-- Bottom interactive input -->
+              <div class="p-3 border-t border-gray-300 dark:border-gray-800 flex items-center space-x-2">
+                <input 
+                  id="chat-input" 
+                  type="text" 
+                  placeholder="Write a message..."
+                  onkeypress="handleChatEnter(event)"
+                  class="flex-grow px-3 py-2 text-xs rounded border border-gray-300 dark:bg-[#293138] dark:border-gray-700 dark:text-white"
+                >
+                <button onclick="sendChatMessage()" class="p-2 bg-[#0A66C2] hover:bg-[#004182] text-white rounded shadow-sm">
+                  <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= PROFILE SECTION ================= -->
+        <section id="pane-profile" class="app-pane hidden space-y-6">
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl overflow-hidden shadow-sm">
+            <div class="h-28 bg-gradient-to-r from-blue-600 to-indigo-950 flex items-center justify-end px-5 relative">
+              <span class="text-[9px] font-extrabold tracking-widest text-[#FFF] uppercase bg-black/40 px-2 py-0.5 rounded">CONNECTSPHERE SECURE LEDGER</span>
+            </div>
+            
+            <div class="p-6 relative">
+              <img id="profile-avatar" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80" class="w-20 h-20 rounded object-cover border-4 border-white dark:border-gray-800 -mt-16 shadow-md relative z-10">
+              
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-3">
+                <div>
+                  <h1 id="profile-name" class="text-2xl font-black tracking-tight text-black dark:text-white">Alex Rivera</h1>
+                  <p id="profile-headline" class="text-xs text-gray-500 font-semibold mt-0.5">Principal Cloud Architect • Google Workspace Developer Specialist</p>
+                  <p id="profile-location" class="text-xs text-blue-500 font-medium mt-1">San Francisco Bay Area, USA</p>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                  <button onclick="window.print()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-xs font-black uppercase tracking-wider rounded border border-gray-300 dark:border-gray-700 inline-flex items-center space-x-1 cursor-pointer">
+                    <i data-lucide="printer" class="w-3.5 h-3.5 text-[#0A66C2]"></i>
+                    <span>Export PDF</span>
+                  </button>
+                  <button onclick="openEditProfileDialog()" class="px-3 py-1.5 bg-[#0A66C2] hover:bg-[#004182] text-white text-xs font-black uppercase tracking-wider rounded shadow-sm flex items-center space-x-1">
+                    <i data-lucide="edit" class="w-3.5 h-3.5"></i>
+                    <span>Edit Profile</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Interactive Profile Bio -->
+              <div class="mt-6 pt-5 border-t border-gray-300 dark:border-gray-800">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Professional Biography</h3>
+                <p id="profile-about" class="text-xs text-gray-750 dark:text-gray-300 leading-relaxed font-medium">
+                  Pioneering scalable enterprise cloud architecture and workspace synchronization infrastructure. Specializing in secure integration protocols, distributed system topologies, and high-throughput real-time APIs. Guiding technical development squads of over 50 professionals globally to deploy highly reliable hybrid architectures.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Professional Experience Cards -->
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-6 shadow-sm space-y-4">
+            <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-300 dark:border-gray-850 pb-2">Experience Ledger</h3>
+            <div id="experience-list-container" class="space-y-4">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <!-- Professional Education and Skills -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-6 shadow-sm">
+              <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-300 dark:border-gray-850 pb-2 mb-4">Academic Background</h3>
+              <div id="education-list-container" class="space-y-3">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-6 shadow-sm">
+              <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400 border-b border-gray-300 dark:border-gray-850 pb-2 mb-4">Technology Endorsement Stack</h3>
+              <div id="skills-list-container" class="flex flex-wrap gap-2">
+                <!-- Skills tags nested -->
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- RIGHT SECTOR: TRENDS & ACTIONS -->
+      <aside class="no-print lg:col-span-1 space-y-4">
+        
+        <!-- Interactive Hashtag Panel -->
+        <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-[10px] font-black uppercase tracking-widest text-gray-400 flex items-center space-x-1.5">
+              <i data-lucide="trending-up" class="text-orange-500 w-3.5 h-3.5 animate-pulse"></i>
+              <span>Trending Insights</span>
+            </h4>
+            <span class="text-[8px] font-black bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded uppercase tracking-wider text-gray-500">Live</span>
+          </div>
+
+          <div class="space-y-3 font-semibold text-xs text-gray-800 dark:text-gray-300">
+            <div onclick="filterFeedByTopic('#GCP')" class="group cursor-pointer flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-800/55 p-1 rounded transition-all">
+              <span class="group-hover:text-[#0A66C2]">#CloudArchitecture</span>
+              <span class="text-[10px] text-gray-400">4k posts</span>
+            </div>
+            <div onclick="filterFeedByTopic('#Security')" class="group cursor-pointer flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-800/55 p-1 rounded transition-all">
+              <span class="group-hover:text-[#0A66C2]">#WebSecurity</span>
+              <span class="text-[10px] text-gray-400">1.8k posts</span>
+            </div>
+            <div onclick="filterFeedByTopic('#TypeScript')" class="group cursor-pointer flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-800/55 p-1 rounded transition-all">
+              <span class="group-hover:text-[#0A66C2]">#React19</span>
+              <span class="text-[10px] text-gray-400">920 posts</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Corporate Promotion Workspace -->
+        <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 text-center shadow-sm relative overflow-hidden">
+          <span class="absolute top-1.5 right-2 text-[8px] font-extrabold tracking-widest text-gray-400 bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded uppercase">Partnership</span>
+          <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wide mt-3">Google Architect Academy</p>
+          <p class="text-xs font-black text-[#0A66C2] dark:text-blue-400 mt-1">Acquire 50% system voucher discount</p>
+          <button onclick="alert('Voucher claim simulation!')" class="mt-3 w-full py-1 text-[10px] font-black text-white bg-[#0A66C2] hover:bg-[#004182] uppercase tracking-wider rounded shadow-sm">
+            Claim Certificate
+          </button>
+        </div>
+
+        <!-- Standalone Info Panel -->
+        <div class="text-center text-[10px] text-gray-500 font-bold uppercase tracking-widest pt-2">
+          ConnectSphere Systems • Standalone v1.0
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- ================= POPUPS / EDIT MODALS ================= -->
+  <!-- Edit Profile Modal Backdrop -->
+  <div id="modal-edit-profile" class="no-print fixed inset-0 z-50 overflow-y-auto bg-black/60 hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-[#1D2226] border border-gray-300 dark:border-gray-800 max-w-lg w-full rounded-xl p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-gray-300 dark:border-gray-800 pb-2">
+        <h3 class="text-base font-black uppercase tracking-wider">Update Personal Profile Coordinates</h3>
+        <button onclick="closeEditProfileDialog()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="text-[9px] font-bold uppercase tracking-widest text-gray-400">FullName</label>
+          <input id="input-edit-name" type="text" class="w-full px-3 py-1.5 text-xs rounded border border-gray-300 dark:bg-[#293138] dark:border-gray-700 dark:text-white focus:outline-none">
+        </div>
+        <div>
+          <label class="text-[9px] font-bold uppercase tracking-widest text-gray-400">Headline Tag</label>
+          <input id="input-edit-headline" type="text" class="w-full px-3 py-1.5 text-xs rounded border border-gray-300 dark:bg-[#293138] dark:border-gray-700 dark:text-white focus:outline-none">
+        </div>
+        <div>
+          <label class="text-[9px] font-bold uppercase tracking-widest text-gray-400">Location</label>
+          <input id="input-edit-location" type="text" class="w-full px-3 py-1.5 text-xs rounded border border-gray-300 dark:bg-[#293138] dark:border-gray-700 dark:text-white focus:outline-none">
+        </div>
+        <div>
+          <label class="text-[9px] font-bold uppercase tracking-widest text-gray-400">About / Personal Bio</label>
+          <textarea id="input-edit-about" rows="3" class="w-full px-3 py-1.5 text-xs rounded border border-gray-300 dark:bg-[#293138] dark:border-gray-700 dark:text-white focus:outline-none resize-none"></textarea>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-2 pt-3 border-t border-gray-300 dark:border-gray-800">
+        <button onclick="closeEditProfileDialog()" class="px-4 py-1.5 border border-gray-300 text-xs font-black uppercase tracking-wider rounded">Cancel</button>
+        <button onclick="saveProfileChanges()" class="px-4 py-1.5 bg-[#0A66C2] hover:bg-[#004182] text-white text-xs font-black uppercase tracking-wider rounded">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STANDALONE JS CORE PROCESSORS -->
+  <script>
+    // Tab routing mechanics
+    function switchTab(tabId) {
+      // Clean previous active state
+      document.querySelectorAll('.app-pane').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-[#0A66C2]', 'border-b-2', 'border-[#0A66C2]');
+        btn.classList.add('text-gray-500');
+      });
+
+      // Show requested pane
+      document.getElementById(`pane-${tabId}`).classList.remove('hidden');
+      const targetBtn = document.getElementById(`tab-${tabId}`);
+      if (targetBtn) {
+        targetBtn.classList.remove('text-gray-500');
+        targetBtn.classList.add('text-[#0A66C2]', 'border-b-2', 'border-[#0A66C2]');
+      }
+
+      window.AppState.activeTab = tabId;
+      saveState();
+    }
+
+    // Toggle styling configuration matching user theme options
+    function toggleTheme() {
+      const doc = document.documentElement;
+      const isCurrentlyDark = doc.classList.contains('dark');
+      if (isCurrentlyDark) {
+        doc.classList.remove('dark');
+        document.getElementById('sun-icon').classList.add('hidden');
+        document.getElementById('moon-icon').classList.remove('hidden');
+        window.AppState.isDarkMode = false;
+      } else {
+        doc.classList.add('dark');
+        document.getElementById('sun-icon').classList.remove('hidden');
+        document.getElementById('moon-icon').classList.add('hidden');
+        window.AppState.isDarkMode = true;
+      }
+      saveState();
+    }
+
+    // Filter feed posts dynamically via clicking hashtags
+    function filterFeedByTopic(hashtag) {
+      switchTab('feed');
+      const input = document.getElementById('feed-input');
+      input.value = hashtag + " ";
+      input.focus();
+    }
+
+    // Creating profile modals
+    function openEditProfileDialog() {
+      document.getElementById('input-edit-name').value = window.AppState.user.name;
+      document.getElementById('input-edit-headline').value = window.AppState.user.headline;
+      document.getElementById('input-edit-location').value = window.AppState.user.location;
+      document.getElementById('input-edit-about').value = window.AppState.user.about;
+      
+      document.getElementById('modal-edit-profile').classList.remove('hidden');
+      document.getElementById('modal-edit-profile').classList.add('flex');
+    }
+
+    function closeEditProfileDialog() {
+      document.getElementById('modal-edit-profile').classList.add('hidden');
+      document.getElementById('modal-edit-profile').classList.remove('flex');
+    }
+
+    // Updating profile structure
+    function saveProfileChanges() {
+      window.AppState.user.name = document.getElementById('input-edit-name').value;
+      window.AppState.user.headline = document.getElementById('input-edit-headline').value;
+      window.AppState.user.location = document.getElementById('input-edit-location').value;
+      window.AppState.user.about = document.getElementById('input-edit-about').value;
+
+      saveState();
+      renderAll();
+      closeEditProfileDialog();
+    }
+
+    // Create New Post Feed entries
+    function createNewPost() {
+      const input = document.getElementById('feed-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const newPost = {
+        id: Date.now(),
+        authorName: window.AppState.user.name,
+        authorHeadline: window.AppState.user.headline,
+        authorAvatar: window.AppState.user.avatar,
+        timestamp: "Just now",
+        content: text,
+        likes: 0,
+        isLiked: false,
+        comments: []
+      };
+
+      window.AppState.posts.unshift(newPost);
+      input.value = "";
+      saveState();
+      renderAll();
+    }
+
+    // Like system loops
+    function toggleLike(postId) {
+      const idx = window.AppState.posts.findIndex(p => p.id === postId);
+      if (idx !== -1) {
+        const post = window.AppState.posts[idx];
+        if (post.isLiked) {
+          post.likes--;
+          post.isLiked = false;
+        } else {
+          post.likes++;
+          post.isLiked = true;
+        }
+        saveState();
+        renderAll();
+      }
+    }
+
+    // Thread interactions
+    function submitComment(postId, inputId) {
+      const field = document.getElementById(inputId);
+      const text = field.value.trim();
+      if (!text) return;
+
+      const idx = window.AppState.posts.findIndex(p => p.id === postId);
+      if (idx !== -1) {
+        window.AppState.posts[idx].comments.push({
+          author: window.AppState.user.name,
+          content: text
+        });
+        field.value = "";
+        saveState();
+        renderAll();
+      }
+    }
+
+    // Network accept / reject invitation triggers
+    function acceptInvite(connectionId) {
+      const idx = window.AppState.connections.findIndex(c => c.id === connectionId);
+      if (idx !== -1) {
+        window.AppState.connections[idx].status = 'connected';
+        // Decrement network badge
+        const badge = document.getElementById('badge-network');
+        if (badge) badge.innerText = "0";
+        saveState();
+        renderNetwork();
+      }
+    }
+
+    function removeInvite(connectionId) {
+      window.AppState.connections = window.AppState.connections.filter(c => c.id !== connectionId);
+      const badge = document.getElementById('badge-network');
+      if (badge) badge.innerText = "0";
+      saveState();
+      renderNetwork();
+    }
+
+    function invitePerson(connectionId) {
+      const idx = window.AppState.connections.findIndex(c => c.id === connectionId);
+      if (idx !== -1) {
+        window.AppState.connections[idx].status = 'pending';
+        saveState();
+        renderNetwork();
+      }
+    }
+
+    // Apply for active roles
+    function applyJob(jobId) {
+      const idx = window.AppState.jobs.findIndex(j => j.id === jobId);
+      if (idx !== -1) {
+        window.AppState.jobs[idx].isApplied = true;
+        saveState();
+        renderJobs();
+        alert('Application submitted successfully! Recruiter notified through secure link channels.');
+      }
+    }
+
+    // Real-time Chat threads sending & responses simulation
+    function handleChatEnter(e) {
+      if (e.key === 'Enter') {
+        sendChatMessage();
+      }
+    }
+
+    function sendChatMessage() {
+      const chatField = document.getElementById('chat-input');
+      const text = chatField.value.trim();
+      if (!text) return;
+
+      const activeId = window.AppState.activeChatId;
+      const idx = window.AppState.messages.findIndex(m => m.id === activeId);
+
+      if (idx !== -1) {
+        window.AppState.messages[idx].history.push({
+          sender: 'me',
+          text: text
+        });
+        chatField.value = "";
+        saveState();
+        renderChat();
+
+        // Recruiter Automated Reply Simulation (2 seconds wait)
+        setTimeout(() => {
+          const thread = window.AppState.messages[idx];
+          thread.history.push({
+            sender: 'them',
+            text: `Received. Excellent context! I've logged this directly underneath Alex Rivera's secure portfolio logs. Let's schedule a virtual call very soon.`
+          });
+          saveState();
+          renderChat();
+          // Update Lucide icons
+          lucide.createIcons();
+        }, 1800);
+      }
+    }
+
+    function switchChatThread(threadId) {
+      window.AppState.activeChatId = threadId;
+      saveState();
+      renderChat();
+    }
+
+    // RENDER FUNCTIONS (Pure high fidelity dynamic script)
+    function renderPosts() {
+      const postsBox = document.getElementById('posts-container');
+      postsBox.innerHTML = window.AppState.posts.map((post) => {
+        const isL = post.isLiked;
+        const inputId = `comment-input-${post.id}`;
+        
+        const commentsHtml = post.comments.map(c => `
+          <div class="px-3 py-2 bg-gray-50 dark:bg-gray-800/40 rounded border border-gray-150 dark:border-gray-850 text-xs">
+            <span class="font-black text-black dark:text-blue-400">${c.author}:</span>
+            <span class="font-medium text-gray-700 dark:text-gray-300 ml-1">${c.content}</span>
+          </div>
+        `).join('');
+
+        return `
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 shadow-sm space-y-3">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3">
+                <img src="${post.authorAvatar}" class="w-10 h-10 rounded object-cover border border-gray-200">
+                <div>
+                  <h4 class="text-sm font-black leading-tight text-black dark:text-white">${post.authorName}</h4>
+                  <p class="text-[11px] text-gray-400 font-semibold leading-none mt-1 truncate max-w-sm">${post.authorHeadline}</p>
+                  <p class="text-[9px] text-[#0A66C2] font-black uppercase mt-1 tracking-wider">${post.timestamp}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap text-gray-905 dark:text-gray-105 font-medium">${post.content}</div>
+
+            <!-- Like stat values -->
+            <div class="flex items-center justify-between text-[10px] text-gray-400 border-b border-gray-300 dark:border-gray-800 pb-1.5 uppercase font-bold tracking-wider">
+              <span>${post.likes} Likes</span>
+              <span>${post.comments.length} Comments</span>
+            </div>
+
+            <!-- Action panel -->
+            <div class="grid grid-cols-2 gap-2 text-xs pt-1 no-print">
+              <button onclick="toggleLike(${post.id})" class="py-1 px-3 rounded font-black uppercase tracking-wider flex items-center justify-center space-x-1.5 cursor-pointer ${isL ? 'text-[#0A66C2] bg-blue-500/5' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'}">
+                <i data-lucide="thumbs-up" class="w-4 h-4" ${isL ? 'fill="currentColor"' : ''}></i>
+                <span>Like</span>
+              </button>
+              <button onclick="document.getElementById('${inputId}').focus()" class="py-1 px-3 rounded hover:bg-gray-100 dark:hover:bg-gray-800 font-black uppercase tracking-wider flex items-center justify-center space-x-1.5 cursor-pointer text-gray-500">
+                <i data-lucide="message-square" class="w-4 h-4"></i>
+                <span>Comment</span>
+              </button>
+            </div>
+
+            <!-- Comment Composer and display list -->
+            <div class="pt-2 border-t border-gray-300 dark:border-gray-850 space-y-2">
+              <div class="space-y-1.5">${commentsHtml}</div>
+              <div class="flex items-center space-x-2 no-print pt-1">
+                <input 
+                  id="${inputId}" 
+                  type="text" 
+                  placeholder="Insert feedback..."
+                  onkeypress="if(event.key==='Enter') submitComment(${post.id}, '${inputId}')"
+                  class="flex-grow px-2 py-1 text-xs rounded border border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                >
+                <button onclick="submitComment(${post.id}, '${inputId}')" class="p-1.5 bg-[#0A66C2] text-white rounded text-xs px-3 font-bold uppercase tracking-wider">Send</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderNetwork() {
+      const pendingBox = document.getElementById('pending-network-container');
+      const recsBox = document.getElementById('recommendations-container');
+
+      const pendings = window.AppState.connections.filter(c => c.status === 'pending');
+      const recommendeds = window.AppState.connections.filter(c => c.status === 'recommended');
+
+      // Pending queue
+      if (pendings.length === 0) {
+        pendingBox.innerHTML = `
+          <div class="p-4 rounded-xl border border-dashed border-gray-200 dark:border-gray-800 text-center text-xs text-gray-400">
+            No pending incoming synchronization requests.
+          </div>
+        `;
+      } else {
+        pendingBox.innerHTML = pendings.map(c => `
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 flex items-center justify-between gap-3 shadow-sm">
+            <div class="flex items-center space-x-3">
+              <img src="${c.avatar}" class="w-11 h-11 rounded object-cover border border-gray-200">
+              <div>
+                <h4 class="text-xs sm:text-sm font-black text-black dark:text-white">${c.name}</h4>
+                <p class="text-[10px] text-gray-500 font-semibold mt-0.5 line-clamp-1">${c.headline}</p>
+                <p class="text-[9px] text-[#0A66C2] font-semibold uppercase mt-1 tracking-wider">${c.mutualCount} mutual networks</p>
+              </div>
+            </div>
+            <div class="flex space-x-1.5">
+              <button onclick="acceptInvite(${c.id})" class="p-1 px-3 bg-[#0A66C2] hover:bg-[#004182] text-white text-[10px] font-black uppercase tracking-wider rounded">Accept</button>
+              <button onclick="removeInvite(${c.id})" class="p-1 px-2 border border-gray-300 dark:border-gray-750 text-gray-500 text-[10px] font-black uppercase tracking-wider rounded">Ignore</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Vetted suggestions
+      recsBox.innerHTML = recommendeds.map(c => `
+        <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-4 text-center shadow-sm flex flex-col justify-between">
+          <div>
+            <img src="${c.avatar}" class="w-16 h-16 rounded object-cover mx-auto border border-gray-300">
+            <h4 class="text-sm font-black mt-2 text-black dark:text-white">${c.name}</h4>
+            <p class="text-[11px] text-gray-500 font-semibold mt-1 line-clamp-2 min-h-[32px]">${c.headline}</p>
+          </div>
+          <button onclick="invitePerson(${c.id})" class="mt-3 w-full py-1 border border-[#0A66C2]/40 text-[#0A66C2] hover:bg-[#0A66C2]/5 text-[10px] font-extrabold uppercase tracking-widest rounded transition-colors">Connect</button>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderJobs() {
+      const jobsBox = document.getElementById('jobs-container');
+      jobsBox.innerHTML = window.AppState.jobs.map(j => {
+        const tagHtml = j.tags.map(t => `<span class="bg-gray-100 dark:bg-gray-800 text-[9px] font-black text-gray-500 dark:text-gray-350 px-2 py-0.5 rounded tracking-wider uppercase border border-gray-200 dark:border-gray-800">${t}</span>`).join('');
+        const appliedBtn = j.isApplied 
+          ? `<span class="px-4 py-1.5 bg-emerald-500/10 text-emerald-500 text-[10px] font-black uppercase tracking-wider rounded border border-emerald-500/20">Applied</span>`
+          : `<button onclick="applyJob(${j.id})" class="px-4 py-1.5 bg-[#0A66C2] hover:bg-[#004182] text-white text-[10px] font-black uppercase tracking-wider rounded shadow-sm">Easy Apply</button>`;
+
+        return `
+          <div class="bg-white border border-gray-300 dark:bg-[#1D2226] dark:border-gray-800 rounded-xl p-5 shadow-sm space-y-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="text-sm sm:text-base font-black tracking-tight text-black dark:text-white">${j.role}</h3>
+                <p class="text-xs text-[#0A66C2] font-bold mt-0.5">${j.company}</p>
+                <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-wider font-semibold">${j.location}</p>
+              </div>
+              <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 dark:bg-gray-800 px-2.5 py-1 rounded border border-gray-150 dark:border-gray-750">${j.salary}</div>
+            </div>
+
+            <div class="flex flex-wrap gap-1.5 pt-1 border-t border-gray-150 dark:border-gray-850">${tagHtml}</div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-800 mt-2">
+              <span class="text-[9px] text-emerald-500 font-extrabold uppercase tracking-widest">Actively Hiring</span>
+              ${appliedBtn}
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderChat() {
+      const threadsBox = document.getElementById('message-threads-list');
+      const historyBox = document.getElementById('message-history-box');
+
+      // Threads render
+      threadsBox.innerHTML = window.AppState.messages.map(m => {
+        const lastMsg = m.history[m.history.length - 1];
+        const isSelected = m.id === window.AppState.activeChatId;
+        return `
+          <div onclick="switchChatThread(${m.id})" class="p-3 flex items-center space-x-2 cursor-pointer transition-colors ${isSelected ? 'bg-blue-50 dark:bg-gray-800/40 border-l-4 border-[#0A66C2]' : 'hover:bg-gray-50 dark:hover:bg-gray-800/20'}">
+            <img src="${m.contactAvatar}" class="w-9 h-9 rounded object-cover border">
+            <div class="overflow-hidden">
+              <h4 class="text-xs font-black truncate">${m.contactName}</h4>
+              <p class="text-[10px] text-gray-400 truncate mt-0.5">${lastMsg ? lastMsg.text : 'Placeholder snippet...'}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // History render
+      const activeThread = window.AppState.messages.find(m => m.id === window.AppState.activeChatId);
+      if (activeThread) {
+        document.getElementById('active-chat-name').innerText = activeThread.contactName;
+        historyBox.innerHTML = activeThread.history.map(h => {
+          const isMe = h.sender === 'me';
+          return `
+            <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+              <div class="p-2.5 max-w-sm rounded text-xs font-medium border shadow-sm ${isMe ? 'bg-[#0A66C2] text-white border-[#0A66C2]/40 rounded-br-none' : 'bg-gray-50 border-gray-300 dark:bg-gray-800 dark:border-gray-700 text-gray-900 dark:text-gray-100 rounded-bl-none'}">
+                ${h.text}
+              </div>
+            </div>
+          `;
+        }).join('');
+        // Scroll bottom helper
+        historyBox.scrollTop = historyBox.scrollHeight;
+      }
+      lucide.createIcons();
+    }
+
+    function renderProfile() {
+      // Experience rendering
+      const expBox = document.getElementById('experience-list-container');
+      expBox.innerHTML = window.AppState.user.experience.map(e => `
+        <div class="item-block border-l-2 border-gray-200 dark:border-gray-800 pl-4 space-y-1">
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="text-sm font-black text-black dark:text-white">${e.role}</h4>
+              <p class="text-xs text-[#0A66C2] font-bold">${e.company}</p>
+            </div>
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50 dark:bg-gray-800 px-2 py-0.5 rounded border border-gray-150 dark:border-gray-750">${e.duration}</span>
+          </div>
+          <p class="text-xs text-gray-700 dark:text-gray-300 leading-relaxed font-semibold mt-1">${e.desc}</p>
+        </div>
+      `).join('');
+
+      // Academic background
+      const eduBox = document.getElementById('education-list-container');
+      eduBox.innerHTML = window.AppState.user.education.map(ed => `
+        <div class="border-l-2 border-gray-200 dark:border-gray-850 pl-3">
+          <h4 class="text-xs font-black text-black dark:text-white">${ed.degree}</h4>
+          <p class="text-[10px] text-gray-400 font-bold mt-0.5">${ed.school}</p>
+          <p class="text-[9px] text-[#0A66C2] font-black uppercase mt-1 tracking-wider">${ed.year}</p>
+        </div>
+      `).join('');
+
+      // Skills endorsement
+      const skillsBox = document.getElementById('skills-list-container');
+      skillsBox.innerHTML = window.AppState.user.skills.map(s => `
+        <span class="bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/30 dark:hover:bg-gray-800/80 px-2.5 py-1 text-[9px] font-bold text-gray-500 dark:text-gray-300 border border-gray-300 dark:border-gray-800 rounded uppercase tracking-wider flex items-center space-x-1">
+          <i data-lucide="check" class="w-3 h-3 text-emerald-500"></i>
+          <span>${s}</span>
+        </span>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // Comprehensive rendering triggers
+    function renderAll() {
+      // Sync names and identity indicators across app panes
+      document.getElementById('sidebar-name').innerText = window.AppState.user.name;
+      document.getElementById('sidebar-headline').innerText = window.AppState.user.headline;
+      document.getElementById('sidebar-views').innerText = window.AppState.stats.views;
+      document.getElementById('sidebar-impressions').innerText = window.AppState.stats.impressions;
+
+      document.getElementById('profile-name').innerText = window.AppState.user.name;
+      document.getElementById('profile-headline').innerText = window.AppState.user.headline;
+      document.getElementById('profile-location').innerText = window.AppState.user.location;
+      document.getElementById('profile-about').innerText = window.AppState.user.about;
+
+      renderPosts();
+      renderNetwork();
+      renderJobs();
+      renderChat();
+      renderProfile();
+    }
+
+    // Download standalone index code
+    function downloadStandaloneCode() {
+      // Remove local storage items that might block or bloat template
+      const fullDoc = document.documentElement.cloneNode(true);
+      const outputHTML = '<!DOCTYPE html>\n' + fullDoc.outerHTML;
+
+      const element = document.createElement('a');
+      const file = new Blob([outputHTML], {type: 'text/html;charset=utf-8'});
+      element.href = URL.createObjectURL(file);
+      element.download = "connectsphere_linkedin_clone.html";
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    // Start-up triggers
+    window.addEventListener('DOMContentLoaded', () => {
+      // Set active tab based on saved state
+      switchTab(window.AppState.activeTab || 'feed');
+      
+      // Initialize dark mode check
+      if (window.AppState.isDarkMode) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('sun-icon').classList.remove('hidden');
+        document.getElementById('moon-icon').classList.add('hidden');
+      }
+
+      renderAll();
+    });
+  </script>
+
+</body>
+</html>
