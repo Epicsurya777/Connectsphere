@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;750;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Core style overrides for Clean Minimalism Theme */
+:root {
+  --primary: #0A66C2;
+  --bg: #F3F2EF;
+  --border-color: #e0e0e0;
+  --text-main: rgba(0, 0, 0, 0.9);
+  --text-sub: rgba(0, 0, 0, 0.6);
+  --white: #FFFFFF;
+  --hover-bg: rgba(0, 0, 0, 0.05);
+}
+
+.dark {
+  --bg: #090d16;
+  --border-color: #212c3d;
+  --text-main: #f1f5f9;
+  --text-sub: #94a3b8;
+  --white: #0f172a;
+  --hover-bg: rgba(255, 255, 255, 0.05);
+}
+
+html, body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  scroll-behavior: smooth;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Custom scrollbar for beautiful dashboard experience */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
+
+/* Clean Custom styles to override shadow/glow layouts for true flat minimalism */
+.shadow-xs {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03) !important;
+}
+.shadow-sm, .shadow-md, .shadow-lg {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02), 0 1px 2px -1px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Roundedness reset: the theme's standard is 8px (rounded-lg) or 4px (rounded) */
+.rounded-xl, .rounded-2xl, .rounded-3xl {
+  border-radius: 8px !important;
+}
+
+/* CSS transition helper */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
